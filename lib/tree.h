@@ -1,6 +1,7 @@
 #ifndef ENCODING_TREE_H
 #define ENCODING_TREE_H
 
+#include <array>
 #include <algorithm>
 #include "constants.h"
 #include "counter.h"
@@ -48,7 +49,14 @@ class code_tree {
     std::vector<bool> const& get_code(byte s);
 
     // Returns map <clear byte - huffman code>
-    std::map<byte, std::vector<bool>> const& get_code_map() { return code; }
+    std::map<byte, std::vector<bool>> get_code_map()
+    {
+        std::map<byte, std::vector<bool>> result;
+        for (unsigned i = 0; i != 256; ++i)
+            if (!code[i].empty())
+                result.insert({i, code[i]});
+        return result;
+    }
 
     // this must be private but is really hard to retreave
     node* root;
@@ -56,7 +64,7 @@ class code_tree {
     ~code_tree();
 
    private:
-    std::map<byte, std::vector<bool>> code;
+    std::array<std::vector<bool>, 256> code;
     std::map<byte, ullong> freq;
 
     // Implementation of tree build
