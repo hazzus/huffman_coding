@@ -28,12 +28,11 @@ code_tree::code_tree(std::map<byte, std::vector<bool>> codes) {
 }
 
 const std::vector<bool>& code_tree::get_code(byte s) {
-    if (code.find(s) != code.end()) {
-        return code.at(s);
-    } else {
+    if (code[s].empty())
         throw std::runtime_error("No such symbol found in tree: " +
                                  s);  // exception no such synbol in tree
-    }
+
+    return code[s];
 }
 
 code_tree::~code_tree() { del(root); }
@@ -69,7 +68,7 @@ void code_tree::specific_build(std::pair<byte, std::vector<bool>> p) {
 void code_tree::dfs_assign(node* vertex, std::vector<bool> code) {
     if (vertex == nullptr) return;
     if (vertex->end) {
-        this->code.insert({vertex->symbol, code});
+        this->code[vertex->symbol] = code;
     } else {
         // 0 - to the left, 1 - to the right
         code.push_back(false);
