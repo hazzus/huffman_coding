@@ -8,6 +8,7 @@
 
 #include <../util/file_decoder.h>
 #include <../util/file_encoder.h>
+#include <code.h>
 #include <decoder.h>
 #include <encoder.h>
 #include <fstream>
@@ -39,7 +40,6 @@ TEST(correctness, size_one) {
     encoder e(c);
     decoder d(e.get_map());
 
-    EXPECT_TRUE(e.encode(x).size() == coef);
     EXPECT_TRUE(d.decode(e.encode(x)) == x);
 }
 
@@ -112,7 +112,7 @@ TEST(correctness, wrong_code) {
 
     encoder e(c);
     decoder d(e.get_map());
-    std::vector<bool> res = e.encode(x);
-    res.insert(res.end(), 1, 1);
+    bitstring res = e.encode(x);
+    res.push_back(symbol_code((uint64_t)1 << 63, 1));
     EXPECT_ANY_THROW(d.decode(res));
 }

@@ -1,27 +1,42 @@
 #include "writer.h"
-#include "constants.h"
 
-void writer::write_bool_data(std::vector<bool> data) {
-    data.insert(data.begin(), remain.begin(), remain.end());
-    remain.clear();
-    size_t i = 0;
-    if (data.size() >= 8) {
-        for (; i < data.size() - 8; i += 8) {
-            char cur = 0;
-            for (size_t j = i, s = 7; s < 8 && j < data.size(); j++, s--) {
-                cur |= (data[j] << s);
-            }
-            out << cur;
+void writer::write_bool_data(bitstring data) {
+    if (data.size() == 0) return;
+    for (size_t i = 0; i < data.size() - 1; i++) {
+        remain.push_back(symbol_code(data.get_real(i), 64));
+    }
+    remain.push_back(
+        symbol_code(data.get_real(data.size() - 1), data.get_last()));
+
+    for (size_t i = 0; i < remain.size() - 1; i++) {
+        uint64_t x = remain.get_real(i);
+        for (size_t j = 8; j <= 64; j += 8) {
+            out << (byte)((x >> (64 - j)) & 255);
         }
     }
-    if (i + 8 != data.size()) {
-        remain.insert(remain.end(), data.begin() + i, data.end());
-    } else {
-        char cur = 0;
-        for (size_t j = i, s = 7; s < 8 && j < data.size(); j++, s--) {
-            cur |= (data[j] << s);
+    if (remain.get_last() != 0) {
+        uint64_t x = remain.get_real(remain.size() - 1);
+        size_t i = 8;
+        if (remain.get_last() > 8) {
+            for (; i < remain.get_last(); i += 8) {
+                out << (byte)((x >> (64 - i)) & 255);
+            }
+
+            bitstring new_remain;
+            if (i == remain.get_last()) {
+                out << (byte)((x >> (64 - i)) & 255);
+                remain.clear();
+            } else if (i > remain.get_last()) {
+                new_remain.push_back(symbol_code(
+                    x << (i - 8), static_cast<byte>(remain.get_last() % 8)));
+                remain = new_remain;
+            }
+        } else {
+            bitstring new_remain;
+            new_remain.push_back(
+                symbol_code(x & (255ull << 56), remain.get_last()));
+            remain = new_remain;
         }
-        out << cur;
     }
 }
 
@@ -33,12 +48,7 @@ void writer::write_byte_data(std::vector<byte> data) {
 
 writer::~writer() {
     if (remain.size() > 0) {
-        remain.insert(remain.end(), 8 - remain.size(), 0);
-        char last = 0;
-        for (size_t i = 0; i < 8; i++) {
-            last |= (remain[i] << (7 - i));
-        }
-        out << last;
+        out << (byte)((remain.get_real(0) >> (56)) & 255);
     }
     out.close();
 }

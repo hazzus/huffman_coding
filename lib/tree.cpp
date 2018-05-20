@@ -20,20 +20,14 @@ code_tree::code_tree(std::map<byte, ullong> alphabet) {
     build_tree(dict);
 }
 
-code_tree::code_tree(std::map<byte, std::vector<bool>> codes) {
+code_tree::code_tree(std::map<byte, symbol_code> codes) {
     root = new node();
     for (auto p : codes) {
         specific_build(p);
     }
 }
 
-const std::vector<bool>& code_tree::get_code(byte s) {
-    if (code[s].empty())
-        throw std::runtime_error("No such symbol found in tree: " +
-                                 s);  // exception no such synbol in tree
-
-    return code[s];
-}
+const symbol_code& code_tree::get_code(byte s) { return code[s]; }
 
 code_tree::~code_tree() { del(root); }
 
@@ -46,10 +40,11 @@ void code_tree::del(node*& cur) {
     }
 }
 
-void code_tree::specific_build(std::pair<byte, std::vector<bool>> p) {
+void code_tree::specific_build(std::pair<byte, symbol_code> p) {
     node* current = root;
-    for (bool v : p.second) {
-        if (v) {
+    // iteration by small code
+    for (size_t i = 0; i < p.second.size(); i++) {
+        if ((p.second.get_code() >> (63 - i)) & 1) {
             if (current->right == nullptr) {
                 current->right = new node();
             }
@@ -65,7 +60,7 @@ void code_tree::specific_build(std::pair<byte, std::vector<bool>> p) {
     current->symbol = p.first;
 }
 
-void code_tree::dfs_assign(node* vertex, std::vector<bool> code) {
+void code_tree::dfs_assign(node* vertex, symbol_code code) {
     if (vertex == nullptr) return;
     if (vertex->end) {
         this->code[vertex->symbol] = code;
@@ -101,7 +96,7 @@ void code_tree::build_tree(std::vector<node*> dict) {
         } else {
             root = dict[0];
         }
-        dfs_assign(root, std::vector<bool>());
+        dfs_assign(root, symbol_code());
     } else {
         root = nullptr;
     }

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+#include "code.h"
 #include "constants.h"
 
 class reader {
@@ -19,7 +20,7 @@ class reader {
 
     std::vector<byte> read_byte_data(size_t amount);
 
-    std::vector<bool> read_bool_data(size_t amount);
+    bitstring read_bool_data(size_t amount);
 
     ~reader() { in.close(); }
 

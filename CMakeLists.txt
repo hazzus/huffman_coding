@@ -12,7 +12,8 @@ add_library(huflib STATIC lib/constants.h
     lib/counter.h   lib/counter.cpp
     lib/tree.h      lib/tree.cpp
     lib/decoder.h   lib/decoder.cpp
-    lib/encoder.h   lib/encoder.cpp)
+    lib/encoder.h   lib/encoder.cpp
+    lib/code.h      lib/code.cpp)
 
 include_directories(lib)
 
@@ -36,4 +37,9 @@ add_executable(tests ${TEST_FILES})
 include_directories(test)
 
 target_link_libraries(tests huflib -lpthread)
+
+
+add_executable(my_test util/my_test.cpp)
+
+target_link_libraries(my_test huflib)
 

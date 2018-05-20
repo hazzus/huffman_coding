@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "code.h"
 #include "encoder.h"
 #include "reader.h"
 #include "writer.h"
@@ -26,7 +27,7 @@ class file_encoder {
     void write_dictionary();  // same as higher
 
     // This can return other dict(not frequency) if needed
-    std::map<byte, std::vector<bool>> get_dict() { return enc.get_map(); }
+    std::map<byte, symbol_code> get_dict() { return enc.get_map(); }
 
    private:
     std::string filename;

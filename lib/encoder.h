@@ -2,6 +2,7 @@
 #define ENCODER_H
 
 #include <vector>
+#include "code.h"
 #include "constants.h"
 #include "counter.h"
 #include "tree.h"
@@ -16,12 +17,10 @@ class encoder {
     // Other constructors may be placed here, but are they nesseccary?
 
     // Implements encoding basing on the tree
-    std::vector<bool> encode(std::vector<byte> data);
+    bitstring encode(std::vector<byte> data);
 
     // Returns the map <clear byte - huffman code>
-    std::map<byte, std::vector<bool>> get_map() {
-        return source_tree.get_code_map();
-    }
+    std::map<byte, symbol_code> get_map() { return source_tree.get_code_map(); }
 
    private:
     code_tree source_tree;

@@ -1,21 +1,18 @@
 #include "reader.h"
 
 std::vector<byte> reader::read_byte_data(size_t amount) {
-    size_t i = 0;
-    char c;
     std::vector<byte> result;
-    while (i < amount && in.get(c)) {
-        result.push_back(c);
-        i++;
-    }
+    char* c = new char[amount];
+    in.read(c, amount);
+    result.insert(result.end(), c, c + in.gcount());
     return result;
 }
 
-std::vector<bool> reader::read_bool_data(size_t amount) {
+bitstring reader::read_bool_data(size_t amount) {
     std::vector<byte> chars = read_byte_data(amount);
-    std::vector<bool> result;
+    bitstring result;
     for (byte c : chars) {
-        for (size_t i = 0; i < 8; i++) result.push_back((c >> (7 - i)) & 1);
+        result.push_back(symbol_code(c));
     }
     return result;
 }

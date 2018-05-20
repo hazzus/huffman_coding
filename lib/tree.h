@@ -1,8 +1,9 @@
 #ifndef ENCODING_TREE_H
 #define ENCODING_TREE_H
 
-#include <array>
 #include <algorithm>
+#include <array>
+#include "code.h"
 #include "constants.h"
 #include "counter.h"
 
@@ -43,18 +44,16 @@ class code_tree {
     code_tree(std::map<byte, ullong> alphabet);
 
     // Constructor from map clear byte - huffcode, (for even faster work?)
-    code_tree(std::map<byte, std::vector<bool>> codes);
+    code_tree(std::map<byte, symbol_code> codes);
 
     // Returns huffman code of specific byte
-    std::vector<bool> const& get_code(byte s);
+    symbol_code const& get_code(byte s);
 
     // Returns map <clear byte - huffman code>
-    std::map<byte, std::vector<bool>> get_code_map()
-    {
-        std::map<byte, std::vector<bool>> result;
+    std::map<byte, symbol_code> get_code_map() {
+        std::map<byte, symbol_code> result;
         for (unsigned i = 0; i != 256; ++i)
-            if (!code[i].empty())
-                result.insert({i, code[i]});
+            if (!code[i].empty()) result.insert({i, code[i]});
         return result;
     }
 
@@ -64,15 +63,15 @@ class code_tree {
     ~code_tree();
 
    private:
-    std::array<std::vector<bool>, 256> code;
+    std::array<symbol_code, 256> code;
     std::map<byte, ullong> freq;
 
     // Implementation of tree build
     void build_tree(std::vector<node*> dict);
 
-    void dfs_assign(node* vertex, std::vector<bool> code);
+    void dfs_assign(node* vertex, symbol_code code);
 
-    void specific_build(std::pair<byte, std::vector<bool>> p);
+    void specific_build(std::pair<byte, symbol_code> p);
 
     void del(node*& cur);
 };

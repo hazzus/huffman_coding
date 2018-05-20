@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "code.h"
 #include "constants.h"
 
 class writer {
@@ -13,7 +14,7 @@ class writer {
         : filename(filename), out(this->filename, std::ios::binary), remain() {}
     // Check permission and while working too!
 
-    void write_bool_data(std::vector<bool> data);
+    void write_bool_data(bitstring data);
 
     void write_byte_data(std::vector<byte> data);
 
@@ -22,7 +23,9 @@ class writer {
    private:
     std::string filename;
     std::ofstream out;
-    std::vector<bool> remain;
+
+    bitstring remain;
+
 };
 
 #endif  // WRITER_H

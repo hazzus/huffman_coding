@@ -1,28 +1,26 @@
 #include "decoder.h"
 
-std::vector<byte> decoder::decode(std::vector<bool> data) {
-    size_t i = 0;
-    data.insert(data.begin(), remain.begin(), remain.end());
-    remain.clear();
+std::vector<byte> decoder::decode(bitstring data) {
     std::vector<byte> result;
-    while (i < data.size()) {
-        code_tree::node* current = source_tree.root;
-        size_t last = data.size() - i;
-        while (current != nullptr && !current->end && i < data.size()) {
-            if (data[i++] == false) {
+    size_t i = 0;
+    if (data.size() == 0)
+        return result;
+    size_t total_size = (data.size() - 1) * 64 + data.get_last();
+    for (; i < total_size;) {
+        while (current != nullptr && !current->end && i < total_size) {
+            if (data[i++] == 0) {
                 current = current->left;
             } else {
                 current = current->right;
             }
         }
-        if (current == nullptr)
-            throw std::runtime_error(
-                "No such code in the tree (It actually then contains only 1 "
-                "code)");
-        if (i == data.size() && !current->end) {
-            remain.insert(remain.end(), data.end() - last, data.end());
-        } else
+        if (current == nullptr) {
+            throw std::runtime_error("No such code in tree");
+        }
+        if (current->end) {
             result.push_back(current->symbol);
+            current = source_tree.root;
+        }
     }
     return result;
 }
