@@ -8,7 +8,7 @@
 
 #include <../util/file_decoder.h>
 #include <../util/file_encoder.h>
-#include <code.h>
+#include <bitstring.h>
 #include <decoder.h>
 #include <encoder.h>
 #include <fstream>

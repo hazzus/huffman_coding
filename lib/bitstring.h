@@ -31,14 +31,17 @@ class bitstring {
     size_t size();
 
     void push_back(symbol_code x);
+    void push_back(uint64_t x);
 
-    uint64_t operator[](size_t index);
+    bool operator[](size_t index);
 
     byte get_last() { return last_size; }
 
-    uint64_t get_real(size_t index);
+    uint64_t const& get_real(size_t index);
 
     void clear();
+
+    void reserve(size_t n);
 
    private:
     std::vector<uint64_t> value;

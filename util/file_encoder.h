@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "code.h"
+#include "bitstring.h"
 #include "encoder.h"
 #include "reader.h"
 #include "writer.h"

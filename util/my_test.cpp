@@ -1,19 +1,19 @@
-#include <iostream>
 #include <fstream>
-#include "code.h"
+#include <iostream>
+#include "bitstring.h"
 #include "decoder.h"
 #include "encoder.h"
-#include "file_decoder.h"
-#include "file_encoder.h"
-#include "file_encoder.cpp"
 #include "file_decoder.cpp"
-#include "writer.cpp"
+#include "file_decoder.h"
+#include "file_encoder.cpp"
+#include "file_encoder.h"
 #include "reader.cpp"
+#include "writer.cpp"
 
 using namespace std;
 
 int main() {
-    std::string file = "easy_test/my_test";
+    std::string file = "../easy_test/my_test";
     std::ofstream out(file + ".in");
     std::string test = "a little test of micro file, really 26316&^&%*!@";
     out << test;

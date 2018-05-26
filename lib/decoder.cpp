@@ -2,13 +2,12 @@
 
 std::vector<byte> decoder::decode(bitstring data) {
     std::vector<byte> result;
+    if (data.size() == 0) return result;
     size_t i = 0;
-    if (data.size() == 0)
-        return result;
     size_t total_size = (data.size() - 1) * 64 + data.get_last();
-    for (; i < total_size;) {
+    while (i < total_size) {
         while (current != nullptr && !current->end && i < total_size) {
-            if (data[i++] == 0) {
+            if (!data[i++]) {
                 current = current->left;
             } else {
                 current = current->right;

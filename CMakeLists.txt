@@ -13,7 +13,7 @@ add_library(huflib STATIC lib/constants.h
     lib/tree.h      lib/tree.cpp
     lib/decoder.h   lib/decoder.cpp
     lib/encoder.h   lib/encoder.cpp
-    lib/code.h      lib/code.cpp)
+    lib/bitstring.h      lib/bitstring.cpp)
 
 include_directories(lib)
 

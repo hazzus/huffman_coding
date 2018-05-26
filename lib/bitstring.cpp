@@ -1,4 +1,4 @@
-#include "code.h"
+#include "bitstring.h"
 
 bool bitstring::empty() { return value.empty(); }
 
@@ -26,6 +26,22 @@ void bitstring::push_back(symbol_code x) {
     }
 }
 
+void bitstring::push_back(uint64_t x) {
+    // 64 size guarantee
+    if (value.size() > 0) {
+        value[value.size() - 1] |= (x >> last_size);
+        if (last_size != 0) {
+            value.push_back(x << (64 - last_size));
+        } else {
+            value.push_back(0);
+        }
+    } else {
+        value.push_back(x);
+        value.push_back(0);
+        last_size = 0;
+    }
+}
+
 bool symbol_code::empty() { return length == 0; }
 
 void symbol_code::push_back(bool x) {
@@ -41,15 +57,15 @@ byte symbol_code::size() { return length; }
 
 uint64_t symbol_code::get_code() { return code; }
 
-uint64_t bitstring::operator[](size_t index) {
-    uint64_t x = value[index / 64];
-    uint shift = (63 - (index % 64));
-    return ((x >> shift) & 1);
+bool bitstring::operator[](size_t index) {
+    return ((value[index / 64] >> (63 - (index % 64))) & 1);
 }
 
-uint64_t bitstring::get_real(size_t index) { return value[index]; }
+uint64_t const& bitstring::get_real(size_t index) { return value[index]; }
 
 void bitstring::clear() {
     value.clear();
     last_size = 0;
 }
+
+void bitstring::reserve(size_t n) { value.reserve(n); }

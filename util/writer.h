@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "code.h"
+#include "bitstring.h"
 #include "constants.h"
 
 class writer {
@@ -25,7 +25,6 @@ class writer {
     std::ofstream out;
 
     bitstring remain;
-
 };
 
 #endif  // WRITER_H

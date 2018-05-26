@@ -20,7 +20,7 @@ void file_decoder::decode_file(std::string to, std::ostream& p_out) {
         << std::endl;
     p_out << "            ";
     while (!in.eof()) {
-        ullong cur = (++done * 50) / times;
+        ullong cur = (times == 0) ? 0 : (++done * 50) / times;
         for (; prev < cur; prev++) {
             p_out << "|";
         }

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 
-#include "code.h"
+#include "bitstring.h"
 #include "constants.h"
 
 class reader {

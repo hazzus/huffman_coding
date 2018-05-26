@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include <array>
-#include "code.h"
+#include "bitstring.h"
 #include "constants.h"
 #include "counter.h"
 

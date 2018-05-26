@@ -2,7 +2,7 @@
 #define ENCODER_H
 
 #include <vector>
-#include "code.h"
+#include "bitstring.h"
 #include "constants.h"
 #include "counter.h"
 #include "tree.h"
