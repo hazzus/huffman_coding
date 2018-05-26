@@ -14,7 +14,7 @@ class file_encoder {
     // Constructor from filename
     file_encoder() = delete;
     explicit file_encoder(std::string filename)
-        : filename(filename), cnt(count_file()), enc(cnt) {}
+        : filename(filename), cnt(count_file()), enc(cnt), message_size(0) {}
 
     // Encodes file to "to"
     void encode_file(std::string to);
@@ -33,6 +33,7 @@ class file_encoder {
     std::string filename;
     counter cnt;
     encoder enc;
+    ullong message_size;
 
     counter count_file();
 };

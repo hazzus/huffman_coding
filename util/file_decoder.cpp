@@ -3,7 +3,7 @@
 #include "writer.h"
 
 void file_decoder::decode_file(std::string to) {
-    reader in(filename);
+    reader in(filename, message_length);
     writer out(to);
     while (!in.eof()) {
         out.write_byte_data(dec.decode(in.read_bool_data(MAX_READ)));
@@ -11,7 +11,7 @@ void file_decoder::decode_file(std::string to) {
 }
 
 void file_decoder::decode_file(std::string to, std::ostream& p_out) {
-    reader in(filename);
+    reader in(filename, message_length);
     writer out(to);
     ullong done = 0;
     double prev = 0;
@@ -62,6 +62,7 @@ std::map<byte, ullong> file_decoder::pull_freq(std::string dictname) {
     ullong x;
     uint z = 0;
     ullong symbol_counter = 0;
+    in_dict >> message_length;
     while (in_dict >> x) {
         if (x != 0) {
             frequency.insert({z, x});

@@ -41,6 +41,7 @@ void writer::write_bool_data(bitstring data) {
     } else {
         remain.clear();
     }
+    written += result.size() * 8;
     out << result;
 }
 
@@ -52,6 +53,8 @@ void writer::write_byte_data(std::vector<byte> data) {
     }
     out << result;
 }
+
+ullong writer::get_written_amount() { return written + remain.get_last(); }
 
 writer::~writer() {
     std::string res;

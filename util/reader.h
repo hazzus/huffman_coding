@@ -18,6 +18,14 @@ class reader {
         }
     }
 
+    reader(std::string filename, ullong length)
+        : in(filename, std::ios::binary), left_to_read(length) {
+        if (in.fail()) {
+            in.close();
+            throw std::runtime_error("No such file " + filename);
+        }
+    }
+
     std::vector<byte> read_byte_data(size_t amount);
 
     bitstring read_bool_data(size_t amount);
@@ -28,6 +36,8 @@ class reader {
 
    private:
     std::ifstream in;
+
+    ullong left_to_read;
 };
 
 #endif  // READER_H

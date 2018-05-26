@@ -15,6 +15,7 @@ void file_encoder::encode_file(std::string to) {
     while (!in.eof()) {
         out.write_bool_data(enc.encode(in.read_byte_data(MAX_READ)));
     }
+    message_size = out.get_written_amount();
 }
 
 void file_encoder::encode_file(std::string to, std::ostream& p_out) {
@@ -34,6 +35,7 @@ void file_encoder::encode_file(std::string to, std::ostream& p_out) {
         p_out.flush();
         out.write_bool_data(enc.encode(in.read_byte_data(MAX_READ)));
     }
+    message_size = out.get_written_amount();
     p_out << std::endl;
 }
 
@@ -45,6 +47,7 @@ void file_encoder::encode_file(std::ostream& p_out) {
 void file_encoder::write_dictionary(std::string to) {
     std::ofstream out_dict(to);
     auto d = cnt.get_freq();
+    out_dict << message_size << " ";
     for (size_t i = 0; i < MAX_DATA + 1; i++) {
         if (d.find(reinterpret_cast<const unsigned char&>(i)) != d.end()) {
             out_dict << d.at(i) << " ";

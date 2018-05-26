@@ -17,6 +17,8 @@ class symbol_code {
 
     uint64_t get_code();
 
+    void set_length(byte l) { length = l; }
+
    private:
     uint64_t code;
     byte length;

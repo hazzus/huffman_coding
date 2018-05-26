@@ -28,6 +28,7 @@ class file_decoder {
     std::string filename;
     std::map<byte, ullong> f;
     decoder dec;
+    ullong message_length;
 
     ullong times;
 
